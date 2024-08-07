@@ -1,6 +1,8 @@
 import pandas as pd
 import numpy as np
 import random
+from faker import Faker
+import csv
 
 nombres_argentinos = {
     'Masculino': ['Juan', 'Carlos', 'José', 'Pedro', 'Luis', 'Miguel', 'Gabriel', 'Santiago',
@@ -27,7 +29,6 @@ def generar_nombres(num_rows):
     nombres.append(nombre)
   return nombres
 
-
 # Generar un DataFrame con más de 100,000 filas
 num_rows = 100000
 data = {
@@ -39,6 +40,46 @@ data = {
 }
 
 df = pd.DataFrame(data)
+
+fake = Faker()
+
+departments = [101, 102, 103, 104, 105]
+
+with open('./data/employees.csv', 'w', newline='') as csvfile:
+    fieldnames = ['employee_id', 'name', 'age', 'gender', 'department_id', 'monthly_salary', 'birth_date']
+    writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+
+    writer.writeheader()
+    for i in range(1, num_rows + 1):
+        writer.writerow({
+            'employee_id': i,
+            'name': fake.name(),
+            'age': random.randint(18, 65),
+            'gender': random.choice(['M', 'F']),
+            'department_id': random.choice(departments),
+            'monthly_salary': random.randint(2000, 8000),
+            'birth_date': fake.date_of_birth(minimum_age=18, maximum_age=65).strftime('%Y-%m-%d')
+        })
+
+# Define the number of departments you want to generate
+departments = [
+    (101, 'IT'),
+    (102, 'Sales'),
+    (103, 'Engineering'),
+    (104, 'Marketing'),
+    (105, 'HR')
+]
+
+with open('./data/departments.csv', 'w', newline='') as csvfile:
+    fieldnames = ['id', 'department_name']
+    writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+
+    writer.writeheader()
+    for dept in departments:
+        writer.writerow({
+            'id': dept[0],
+            'department_name': dept[1]
+        })
 
 # Guardar el DataFrame en un archivo CSV
 csv_path = './data/people_data.csv'
