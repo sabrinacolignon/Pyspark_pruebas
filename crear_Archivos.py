@@ -89,4 +89,21 @@ df.to_csv(csv_path, index=False)
 json_path = './data/people_data.json'
 df.to_json(json_path, orient='records', lines=True)
 
+# Generar datos de ejemplo
+data = {
+    'id': np.arange(1, num_rows + 1),
+    'name': np.random.choice(['Alice', 'Bob', 'Charlie', 'David'], num_rows),
+    'age': np.random.randint(20, 60, num_rows),
+    'city': np.random.choice(['New York', 'Los Angeles', 'Chicago', 'Houston'], num_rows),
+    'salary': np.random.randint(30000, 100000, num_rows)
+}
+
+df = pd.DataFrame(data)
+
+# Guardar en formato CSV
+df.to_csv('./data/data.csv', index=False)
+
+# Guardar en formato Parquet
+df.to_parquet('./data/data.parquet', index=False)
+
 (csv_path, json_path)
